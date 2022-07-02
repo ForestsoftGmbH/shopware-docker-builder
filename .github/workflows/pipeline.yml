@@ -62,7 +62,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v4
       with:
-        images: ${{ steps.vars.outputs.DOCKER_IMAGE }}
+        images: ${{ steps.vars.outputs.DOCKER_IMAGE }}:${{ steps.vars.outputs.DOCKER_MAIN_TAG }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v3
