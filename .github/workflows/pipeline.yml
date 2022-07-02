@@ -1,0 +1,86 @@
+name: Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        SW_VERSION: ["6.4.12"]
+        PHP_VERSION: ["8.1"]
+        PSALM_VERSION: ["4.7.3"]
+        COMPOSER_VERsION: ["2.1"]
+        REMOTE_REPO: ["https://github.com/shopware/production.git"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set outputs
+      shell: bash
+      id: vars
+      run: |
+        echo "::set-output name=DOCKER_TAG::${{matrix.SW_VERSION}}-${{matrix.PHP_VERSION}}-$(git rev-parse --short HEAD)"
+        echo "::set-output name=DOCKER_MAIN_TAG::${{matrix.SW_VERSION}}-${{matrix.PHP_VERSION}}"
+        echo "::set-output name=DOCKER_IMAGE::${{matrix.Images}}"
+        echo "::set-output name=SW_MAJOR::${${{matrix.SW_VERSION}}:0:1}"
+
+    - name: Set up Docker Context for Buildx
+      shell: bash
+      id: buildx-context
+      run: |
+        docker context create builders
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v2
+      with:
+        version: latest
+        endpoint: builders
+
+    - name: Inspect builder
+      shell: bash
+      run: |
+        echo "Name:      ${{ steps.buildx.outputs.name }}"
+        echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+        echo "Status:    ${{ steps.buildx.outputs.status }}"
+        echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+        echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ steps.vars.outputs.DOCKER_IMAGE }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        build-args: |
+          SW_VERSION=${{matrix.SW_VERSION}}
+          PSALM_VERSION=${{matrix.PSALM_VERSION}}
+          SW_MAJOR=${{ steps.vars.outputs.SW_MAJOR }}
+          REMOTE_REPO=${{matrix.REMOTE_REPO}}
+          COMPOSER_VERSION=${{matrix.COMPOSER_VERSION}}
+          PHP_VERSION=${{matrix.PHP_VERSION}}
+        cache-from: |
+          ${{ steps.vars.outputs.DOCKER_IMAGE }}
+          ${{ steps.vars.outputs.DOCKER_IMAGE }}:${{ steps.vars.outputs.DOCKER_MAIN_TAG }}
+        tags: |
+          ${{ steps.vars.outputs.DOCKER_IMAGE }}:${{ steps.vars.outputs.DOCKER_TAG }}
+          ${{ steps.vars.outputs.DOCKER_IMAGE }}:${{ steps.vars.outputs.DOCKER_MAIN_TAG }}
+          ${{ steps.vars.outputs.DOCKER_IMAGE }}:latest
+        labels: ${{ steps.meta.outputs.labels }}

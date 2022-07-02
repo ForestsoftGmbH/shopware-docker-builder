@@ -1,0 +1,29 @@
+version: '3.2'
+services:
+  app:
+    image: forestsoft/shopware:6.4.10.0
+    depends_on:
+      - database
+    environment:
+      DB_NAME: shopware
+      DB_PASSWORD: shopware
+      DB_USER: shopware
+      DB_HOST: database
+      DB_PORT: 3306
+      APP_HOST: "localhost"
+      APP_URL: "https://localhost"
+      APP_SECRET: "topfsecret"
+      INSTANCE_ID: 1
+      DATABASE_URL: mysql://shopware:shopware@database:3306/shopware
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - database:database
+  database:
+    image: forestsoft/shopware_database:6.4.10.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shopware
+      MYSQL_USER: shopware
+      MYSQL_PASSWORD: shopware

@@ -1,0 +1,3 @@
+database_sql_files/*.sql
+/data/
+/.idea/
