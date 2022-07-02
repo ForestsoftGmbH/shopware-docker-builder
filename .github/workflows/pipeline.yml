@@ -24,10 +24,11 @@ jobs:
       shell: bash
       id: vars
       run: |
+        SW_VERSION="${{matrix.SW_VERSION}}"
         echo "::set-output name=DOCKER_TAG::${{matrix.SW_VERSION}}-${{matrix.PHP_VERSION}}-$(git rev-parse --short HEAD)"
         echo "::set-output name=DOCKER_MAIN_TAG::${{matrix.SW_VERSION}}-${{matrix.PHP_VERSION}}"
         echo "::set-output name=DOCKER_IMAGE::${{matrix.Images}}"
-        echo "::set-output name=SW_MAJOR::${'${{matrix.SW_VERSION}}':0:1}"
+        echo "::set-output name=SW_MAJOR::${SW_VERSION:0:1}"
 
     - name: Set up Docker Context for Buildx
       shell: bash
