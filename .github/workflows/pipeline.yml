@@ -77,10 +77,7 @@ jobs:
           COMPOSER_VERSION=${{matrix.COMPOSER_VERSION}}
           PHP_VERSION=${{matrix.PHP_VERSION}}
         cache-from: |
-          ${{ steps.vars.outputs.DOCKER_IMAGE }}
           ${{ steps.vars.outputs.DOCKER_IMAGE }}:${{ steps.vars.outputs.DOCKER_MAIN_TAG }}
         tags: |
           ${{ steps.vars.outputs.DOCKER_IMAGE }}:${{ steps.vars.outputs.DOCKER_TAG }}
-          ${{ steps.vars.outputs.DOCKER_IMAGE }}:${{ steps.vars.outputs.DOCKER_MAIN_TAG }}
-          ${{ steps.vars.outputs.DOCKER_IMAGE }}:latest
         labels: ${{ steps.meta.outputs.labels }}
