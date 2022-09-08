@@ -5,6 +5,9 @@ if [ "$1" == "enable" ]; then
   else
     echo "zend_extension=xdebug" >>   /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
   fi
+  if [ ! -z $MAINTENANCE_IP ]; then
+    sed -i -e "s#;xdebug.client_host=127.0.0.1#xdebug.client_host=$MAINTENANCE_IP#g" /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+  fi
 fi
 
 if [ "$1" == "disable" ]; then
