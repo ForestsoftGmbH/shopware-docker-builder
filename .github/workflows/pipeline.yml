@@ -1,7 +1,6 @@
 name: Pipeline
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
 
@@ -11,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        SW_VERSION: ["6.4.12.0"]
+        SW_VERSION: ["6.4.12.0", "5.7.14"]
         PHP_VERSION: ["8.1"]
         PSALM_VERSION: ["4.7.3"]
         COMPOSER_VERsION: ["2.1"]
@@ -26,6 +25,12 @@ jobs:
         echo "::set-output name=DOCKER_TAG::${{matrix.SW_VERSION}}-${{matrix.PHP_VERSION}}-$(git rev-parse --short HEAD)"
         echo "::set-output name=DOCKER_MAIN_TAG::${{matrix.SW_VERSION}}-${{matrix.PHP_VERSION}}"
         echo "::set-output name=DOCKER_IMAGE::forestsoft/shopware"
+        echo "::set-output name=SW_MAJOR::${SW_VERSION:0:1}"
+        if [ "${SW_VERSION:0:1}" == "6" ]; then
+          echo "::set-output name=REMOTE_REPO::https://github.com/shopware/production.git"
+        else
+          echo "::set-output name=REMOTE_REPO::https://github.com/shopware/shopware.git"
+        fi
         echo "::set-output name=SW_MAJOR::${SW_VERSION:0:1}"
 
     - name: Set up Docker Context for Buildx
@@ -72,7 +77,7 @@ jobs:
           SW_VERSION=${{matrix.SW_VERSION}}
           PSALM_VERSION=${{matrix.PSALM_VERSION}}
           SW_MAJOR=${{ steps.vars.outputs.SW_MAJOR }}
-          REMOTE_REPO=${{matrix.REMOTE_REPO}}
+          REMOTE_REPO=${{ steps.vars.outputs.REMOTE_REPO }}
           COMPOSER_VERSION=${{matrix.COMPOSER_VERSION}}
           PHP_VERSION=${{matrix.PHP_VERSION}}
         cache-from: |
@@ -85,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        SW_VERSION: ["6.4.12.0"]
+        SW_VERSION: ["6.4.12.0", "5.7.14"]
         MYSQL_VERSION: ["5.7"]
     steps:
     - uses: actions/checkout@v3
