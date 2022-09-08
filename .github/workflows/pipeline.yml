@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        SW_VERSION: ["6.4.12.0"]
+        SW_VERSION: ["6.4.12.0", "5.7.14"]
         MYSQL_VERSION: ["5.7"]
     steps:
     - uses: actions/checkout@v3
