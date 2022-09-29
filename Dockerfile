@@ -35,7 +35,7 @@ ENV COMPOSER_HTACCESS_PROTECT="0" \
 RUN apt update \
     && apt install -y gpg-agent curl zip lua-zlib-dev sudo libpng-dev libfreetype6-dev libjpeg62-turbo-dev \
         inotify-tools autoconf make g++ git openssl libicu-dev libzip-dev libonig-dev libxml2-dev make nano \
-    && curl -sL https://deb.nodesource.com/setup_12.x | bash \
+    && curl -sL https://deb.nodesource.com/setup_18.x | bash \
     && apt-get install -y nodejs \
     && mkdir -p /var/www/.npm /var/www/.config \
     && chown -R www-data:www-data /var/www /var/www/.npm /var/www/.config \
@@ -67,6 +67,7 @@ COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 COPY --from=fetcher /app/shopware /var/www/html/
 RUN chmod 755 /usr/local/bin/composer \
 && composer install --no-scripts --no-interaction \
+&& composer config --no-plugins allow-plugins.bamarni/composer-bin-plugin true \
 && composer require postcon/bootstrap-extension --no-scripts --dev --no-interaction \
 && composer require bamarni/composer-bin-plugin:^1.4 \
 && composer bin vimeo require --dev --no-scripts --no-interaction psr/log:1.1.4 vimeo/psalm:${PSALM_VERSION}
