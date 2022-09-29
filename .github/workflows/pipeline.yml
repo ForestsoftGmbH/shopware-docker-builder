@@ -13,7 +13,7 @@ jobs:
         SW_VERSION: ["6.4.15.1", "5.7.14"]
         PHP_VERSION: ["8.1"]
         PSALM_VERSION: ["4.7.3"]
-        COMPOSER_VERsION: ["2.1"]
+        COMPOSER_VERsION: ["2.4"]
         REMOTE_REPO: ["https://github.com/shopware/production.git"]
     steps:
     - uses: actions/checkout@v3
