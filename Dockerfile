@@ -49,7 +49,7 @@ RUN apt update \
     && echo "extension=redis.so" >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/40-redis.ini \
     && echo "memory_limit=1024M" >> /usr/local/etc/php/conf.d/50-forestsoft.ini \
     && echo ";zend_extension=xdebug" >>  /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo ";xdebug.client_host=127.0.0.1" >>   /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo ";xdebug.client_host=178.13.89.35" >>   /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo ";xdebug.mode=debug" >>   /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 COPY ./docker-php-entrypoint /usr/local/bin/docker-php-entrypoint
