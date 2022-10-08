@@ -7,10 +7,10 @@ PHP_VERSION=$3
 MYSQL_VERSION=$4
 
 if [ "" == "$PHP_VERSION" ]; then
-        PHP_VERSION=7.2
+        PHP_VERSION=8.1
 fi
 if [ "" == "$MYSQL_VERSION" ]; then
-        MYSQL_VERSION=5.6
+        MYSQL_VERSION=5.7
 fi
 if [ "" == "$SW_VERSION" ]; then
     echo "Please specify shopware version"
