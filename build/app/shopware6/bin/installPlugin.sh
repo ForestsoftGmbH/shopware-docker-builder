@@ -17,7 +17,7 @@ for plugin in ${PLUGINS}; do
     notInstalled=$(php /var/www/html/bin/plugin.php $plugin installed);
     if [ "$notInstalled" == "1" ]; then
       echo "Install Plugin $plugin"
-      su -s/bin/bash -c"/var/www/html/bin/console plugin:install $plugin" www-data
+      su -s/bin/bash -c"/var/www/html/bin/console plugin:install -a $plugin" www-data
       clearNeeded=1
     fi
     notActive=$(php /var/www/html/bin/plugin.php $plugin active);
