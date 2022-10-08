@@ -1,14 +1,23 @@
 #!/bin/bash
+write_config ( ) {
+  if [ -n "$3" ]; then
+    conf=$3
+  else 
+    conf=50-forestsoft.ini
+  fi
 
-if [ "${SESSION_HANDLER:-""}" != "" ]; then
-    echo "session.save_handler = $SESSION_HANDLER" >> /usr/local/etc/php/conf.d/50-forestsoft.ini
-    echo 'session.save_path = "${SESSION_SAVE_PATH}"' >> /usr/local/etc/php/conf.d/50-forestsoft.ini
-fi
+  if [ -n "$1" ] && [ -n "$2" ]; then
+     echo "$1 = $2" >> /usr/local/etc/php/conf.d/$conf
+  fi    
+}
 
-if [ "${XDEBUG_IP:-""}" != "" ]; then
-  echo "xdebug.client_host=$XDEBUG_IP" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-fi
+write_config "xdebug.client_mode" "$XDEBUG_IP" "docker-php-ext-xdebug.ini"
 
 if [ "${XDEBUG_ENABLED:-""}" != "" ]; then
-  echo "xdebug.client_mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+  write_config "xdebug.client_mode" "debug" "docker-php-ext-xdebug.ini"
 fi
+
+
+write_config "error_reporting" "$PHP_ERR_REPORTING"
+write_config "session.save_handler" "$SESSION_HANDLER"
+write_config "session.save_path" "$SESSION_SAVE_PATH"
