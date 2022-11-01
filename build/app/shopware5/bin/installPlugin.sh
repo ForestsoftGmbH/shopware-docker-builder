@@ -2,6 +2,9 @@
 echo "Refresh Plugin list"
 su -s/bin/bash -c"/var/www/html/bin/console sw:plugin:refresh" www-data
 
+echo "Update installed plugins"
+su -s/bin/bash -c"/var/www/html/bin/console sw:plugin:update --no-refresh --batch active,installed" www-data
+
 PLUGINS=""
 if [ -d "/var/www/html/custom/project" ]; then
   cd /var/www/html/custom/plugins
