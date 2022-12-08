@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         SW_VERSION: ["6.4.17.2", "5.7.14"]
-        PHP_VERSION: ["8.1"]
+        PHP_VERSION: ["8.1", "7.4"]
         PSALM_VERSION: ["4.7.3"]
         COMPOSER_VERsION: ["2.1"]
         REMOTE_REPO: ["https://github.com/shopware/production.git"]
