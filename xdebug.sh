@@ -8,6 +8,7 @@ if [ "$1" == "enable" ]; then
   if [ ! -z $MAINTENANCE_IP ]; then
     sed -i -e "s#;xdebug.client_host=127.0.0.1#xdebug.client_host=$MAINTENANCE_IP#g" /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
   fi
+  sed -i -e 's#;xdebug.mode=debug#xdebug.mode=debug#g' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 fi
 
 if [ "$1" == "disable" ]; then
