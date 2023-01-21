@@ -5,14 +5,16 @@ su -s/bin/bash -c"/var/www/html/bin/console sw:plugin:refresh" www-data
 echo "Update installed plugins"
 su -s/bin/bash -c"/var/www/html/bin/console sw:plugin:update --no-refresh --batch active,installed" www-data
 
-PLUGINS=""
-if [ -d "/var/www/html/custom/project" ]; then
-  cd /var/www/html/custom/plugins
-  PLUGINS=$(ls .);
-fi
-if [ -d "/var/www/html/custom/project" ]; then
-  cd /var/www/html/custom/project
-  PLUGINS="$(echo $PLUGINS) $(ls .)"
+if [ -z $PLUGINS ]; then
+  PLUGINS=""
+  if [ -d "/var/www/html/custom/project" ]; then
+    cd /var/www/html/custom/plugins
+    PLUGINS=$(ls .);
+  fi
+  if [ -d "/var/www/html/custom/project" ]; then
+    cd /var/www/html/custom/project
+    PLUGINS="$(echo $PLUGINS) $(ls .)"
+  fi
 fi
 clearNeeded=0
 for plugin in ${PLUGINS}; do
