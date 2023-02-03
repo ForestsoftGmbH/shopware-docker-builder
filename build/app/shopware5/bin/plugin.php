@@ -26,6 +26,9 @@ try {
     }
 
     $config = include $projectDir . "/config.php";
+    if (getenv("SHOPWARE_ENV") == "testing") {
+        $config['db']['dbname'] = $config['db']['dbname'] . "_test";
+    }
     $pdo = new PDO("mysql:host=" . $config["db"]['host'] . ";dbname=" . $config['db']['dbname'], $config["db"]['username'], $config['db']['password']);
     $result = 1;
     $stmt = $pdo->query("SELECT installation_date,update_version,active from s_core_plugins WHERE name='${plugin}'");
