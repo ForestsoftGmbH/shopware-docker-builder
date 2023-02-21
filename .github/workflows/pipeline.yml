@@ -30,14 +30,16 @@ on:
         description: 'Composer Version'
         required: true
         default: '2.1'
+      
       MYSQL_VERSION:
         description: 'MySQL Version'
         required: true
         type: choice
         options:
+          - ""
           - "5.7"
-          - "8.1"
-        default: '8.1'
+          - "8.0"
+        default: ''
 
       REMOTE_REPO:
         description: 'Remote Repo'
@@ -125,6 +127,7 @@ jobs:
   
   build_database:
     runs-on: ubuntu-latest
+    if: ${{ inputs.MYSQL_VERSION != '' }}
     steps:
     - uses: actions/checkout@v3
     - name: Set outputs
