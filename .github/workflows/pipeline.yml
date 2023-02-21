@@ -4,35 +4,52 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      SW_VERSION:
+        description: 'Shopware Version'
+        required: true
+        default: '6.4.19.0'
+      PHP_VERSION:
+        description: 'PHP Version'
+        required: true
+        default: '8.2'
+      PSALM_VERSION:
+        description: 'Psalm Version'
+        required: true
+        default: '4.7.3'
+      COMPOSER_VERSION:
+        description: 'Composer Version'
+        required: true
+        default: '2.1'
+      REMOTE_REPO:
+        description: 'Remote Repo'
+        required: true
+        type: choice
+        options:
+          - "https://github.com/shopware/production.git"
+        default: ''
 
 jobs:
   
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        SW_VERSION: ["6.4.18.1", "5.7.14"]
-        PHP_VERSION: ["8.2", "7.4"]
-        PSALM_VERSION: ["4.7.3"]
-        COMPOSER_VERsION: ["2.1"]
-        REMOTE_REPO: ["https://github.com/shopware/production.git"]
     steps:
     - uses: actions/checkout@v3
     - name: Set outputs
       shell: bash
       id: vars
       run: |
-        SW_VERSION="${{matrix.SW_VERSION}}"
-        echo "::set-output name=DOCKER_TAG::${{matrix.SW_VERSION}}-${{matrix.PHP_VERSION}}-$(git rev-parse --short HEAD)"
-        echo "::set-output name=DOCKER_MAIN_TAG::${{matrix.SW_VERSION}}-${{matrix.PHP_VERSION}}"
-        echo "::set-output name=DOCKER_IMAGE::forestsoft/shopware"
-        echo "::set-output name=SW_MAJOR::${SW_VERSION:0:1}"
+        SW_VERSION="${{inputs.SW_VERSION}}"
+        echo "DOCKER_TAG=${{inputs.SW_VERSION}}-${{inputs.PHP_VERSION}}-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        echo "DOCKER_MAIN_TAG=${{inputs.SW_VERSION}}-${{inputs.PHP_VERSION}}"  >> $GITHUB_OUTPUT
+        echo "DOCKER_IMAGE=forestsoft/shopware"  >> $GITHUB_OUTPUT
+        echo "SW_MAJOR=${SW_VERSION:0:1}"  >> $GITHUB_OUTPUT
         if [ "${SW_VERSION:0:1}" == "6" ]; then
-          echo "::set-output name=REMOTE_REPO::https://github.com/shopware/production.git"
+          echo "REMOTE_REPO=https://github.com/shopware/production.git"  >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=REMOTE_REPO::https://github.com/shopware/shopware.git"
+          echo "REMOTE_REPO=https://github.com/shopware/shopware.git"  >> $GITHUB_OUTPUT
         fi
-        echo "::set-output name=SW_MAJOR::${SW_VERSION:0:1}"
+        echo "SW_MAJOR=${SW_VERSION:0:1}"  >> $GITHUB_OUTPUT
 
     - name: Set up Docker Context for Buildx
       shell: bash
@@ -75,12 +92,12 @@ jobs:
         file: Dockerfile
         push: true
         build-args: |
-          SW_VERSION=${{matrix.SW_VERSION}}
-          PSALM_VERSION=${{matrix.PSALM_VERSION}}
+          SW_VERSION=${{inputs.SW_VERSION}}
+          PSALM_VERSION=${{inputs.PSALM_VERSION}}
           SW_MAJOR=${{ steps.vars.outputs.SW_MAJOR }}
           REMOTE_REPO=${{ steps.vars.outputs.REMOTE_REPO }}
-          COMPOSER_VERSION=${{matrix.COMPOSER_VERSION}}
-          PHP_VERSION=${{matrix.PHP_VERSION}}
+          COMPOSER_VERSION=${{inputs.COMPOSER_VERSION}}
+          PHP_VERSION=${{inputs.PHP_VERSION}}
         cache-from: |
           ${{ steps.vars.outputs.DOCKER_IMAGE }}:${{ steps.vars.outputs.DOCKER_MAIN_TAG }}
         tags: |
