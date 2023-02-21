@@ -1,8 +1,6 @@
 name: Pipeline
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
     inputs:
       SW_VERSION:
