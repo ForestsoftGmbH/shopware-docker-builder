@@ -31,7 +31,7 @@ on:
         required: true
         default: '2.1'
       MYSQL_VERSION:
-        description: 'Composer Version'
+        description: 'MySQL Version'
         required: true
         type: choice
         options:
