@@ -10,22 +10,43 @@ on:
       PHP_VERSION:
         description: 'PHP Version'
         required: true
+        type: choice
+        options:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+          - "8.2"
         default: '8.2'
       PSALM_VERSION:
         description: 'Psalm Version'
         required: true
-        default: '4.7.3'
+        type: choice
+        default: '5.7.5'
+        options: 
+          - "4.7.3"
+          - "4.8.1"
+          - "5.7.5"
       COMPOSER_VERSION:
         description: 'Composer Version'
         required: true
         default: '2.1'
+      MYSQL_VERSION:
+        description: 'Composer Version'
+        required: true
+        type: choice
+        options:
+          - "5.7"
+          - "8.1"
+        default: '8.1'
+
       REMOTE_REPO:
         description: 'Remote Repo'
         required: true
         type: choice
         options:
+          - "https://github.com/shopware/shopware.git"
           - "https://github.com/shopware/production.git"
-        default: ''
+        default: 'https://github.com/shopware/production.git'
 
 jobs:
   
@@ -104,10 +125,6 @@ jobs:
   
   build_database:
     runs-on: ubuntu-latest
-    strategy:
-      inputs:
-        SW_VERSION: ["6.4.12.0", "5.7.14"]
-        MYSQL_VERSION: ["5.7"]
     steps:
     - uses: actions/checkout@v3
     - name: Set outputs
