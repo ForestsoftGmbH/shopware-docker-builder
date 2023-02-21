@@ -105,7 +105,7 @@ jobs:
   build_database:
     runs-on: ubuntu-latest
     strategy:
-      matrix:
+      inputs:
         SW_VERSION: ["6.4.12.0", "5.7.14"]
         MYSQL_VERSION: ["5.7"]
     steps:
@@ -114,11 +114,11 @@ jobs:
       shell: bash
       id: vars
       run: |
-        SW_VERSION="${{matrix.SW_VERSION}}"
-        echo "::set-output name=DOCKER_TAG::${{matrix.SW_VERSION}}-$(git rev-parse --short HEAD)"
-        echo "::set-output name=DOCKER_MAIN_TAG::${{matrix.SW_VERSION}}"
-        echo "::set-output name=DOCKER_IMAGE::forestsoft/shopware_database"
-        echo "::set-output name=SW_MAJOR::${SW_VERSION:0:1}"
+        SW_VERSION="${{inputs.SW_VERSION}}"
+        echo "DOCKER_TAG=${{inputs.SW_VERSION}}-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        echo "DOCKER_MAIN_TAG=${{inputs.SW_VERSION}}" >> $GITHUB_OUTPUT
+        echo "DOCKER_IMAGE=forestsoft/shopware_database" >> $GITHUB_OUTPUT
+        echo "SW_MAJOR=${SW_VERSION:0:1}" >> $GITHUB_OUTPUT
 
     - name: Set up Docker Context for Buildx
       shell: bash
@@ -161,9 +161,9 @@ jobs:
         file: ./build/database/Dockerfile
         push: true
         build-args: |
-          SW_VERSION=${{matrix.SW_VERSION}}
+          SW_VERSION=${{inputs.SW_VERSION}}
           SW_MAJOR=${{ steps.vars.outputs.SW_MAJOR }}
-          VERSION=${{matrix.MYSQL_VERSION}}
+          VERSION=${{inputs.MYSQL_VERSION}}
         cache-from: |
           ${{ steps.vars.outputs.DOCKER_IMAGE }}:${{ steps.vars.outputs.DOCKER_MAIN_TAG }}
         tags: |
