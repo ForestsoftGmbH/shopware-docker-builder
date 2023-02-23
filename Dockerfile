@@ -37,7 +37,7 @@ ENV COMPOSER_HTACCESS_PROTECT="0" \
     PHP_OPCACHE_MEMORY_CONSUMPTION="192" \
     PHP_OPCACHE_MAX_WASTED_PERCENTAGE="10"
 RUN apt update \
-    && apt install -y gpg-agent curl zip lua-zlib-dev sudo libpng-dev libfreetype6-dev libjpeg62-turbo-dev \
+    && apt install -y gpg-agent curl zip lua-zlib-dev sudo libpng-dev libfreetype6-dev jq libjpeg62-turbo-dev \
         inotify-tools autoconf make g++ git openssl libicu-dev libzip-dev libonig-dev libxml2-dev make nano \
     && curl -sL https://deb.nodesource.com/setup_16.x | bash \
     && apt-get install -y nodejs \
