@@ -9,12 +9,7 @@ return [
         'host' => getenv('DB_HOST'),
         'port' => getenv('DB_PORT'),
     ],
-
-    'csrfProtection' => [
-        'frontend' => false,
-        'backend' => false,
-    ],
-
+    
     'front' => [
         'throwExceptions' => true,
         'showException' => true
@@ -27,34 +22,8 @@ return [
     'template' => [
         'forceCompile' => true
     ],
-
-    // Backend-Cache
-    'cache' => [
-        'backend' => 'Black-Hole',
-        'backendOptions' => [],
-        'frontendOptions' => [
-            'write_control' => false,
-        ],
-    ],
-
-    // Model-Cache
-    'model' => [
-        'cacheProvider' =>  'Array', // supports Apc, Array, Wincache and Xcache
-    ],
-
-    // Http-Cache
-    'httpCache' => [
-        'enabled' => false,
-        'debug' => true,
-    ],
-
+    
     'logger' => [
         'level' => Logger::DEBUG
-    ],
-
-    'mail' => [
-        'type' => 'file',
-        'host' => '',
-        'port' => 1025,
     ],
 ];

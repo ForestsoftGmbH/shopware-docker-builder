@@ -29,13 +29,13 @@ ENV COMPOSER_HTACCESS_PROTECT="0" \
     DB_PORT=3306 \
     APP_URL=https://localhost \
     # E_ALL & ~E_USER_DEPRECATED & ~E_DEPRECATED & ~E_NOTICE
-    PHP_OPCACHE_ENABLED="0" \
-    PHP_OPCACHE_CLI_ENABLED="0" \
     PHP_ERR_REPORTING="8183" \
-    PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
-    PHP_OPCACHE_MAX_ACCELERATED_FILES="10000" \
-    PHP_OPCACHE_MEMORY_CONSUMPTION="192" \
-    PHP_OPCACHE_MAX_WASTED_PERCENTAGE="10"
+    PHP_OPCACHE_CLI_ENABLED="1" \
+    PHP_OPCACHE_ENABLED="1" \
+    PHP_OPCACHE_VALIDATE_TIMESTAMPS="1" \
+    PHP_OPCACHE_MAX_ACCELERATED_FILES="50000" \
+    PHP_OPCACHE_MAX_WASTED_PERCENTAGE="15" \
+    PHP_OPCACHE_MEMORY_CONSUMPTION="512"
 RUN apt update \
     && apt install -y gpg-agent curl zip lua-zlib-dev sudo libpng-dev libfreetype6-dev jq libjpeg62-turbo-dev \
         inotify-tools autoconf make g++ git openssl libicu-dev libzip-dev libonig-dev libxml2-dev make nano \
