@@ -6,7 +6,7 @@ on:
       SW_VERSION:
         description: 'Shopware Version'
         required: true
-        default: 'v6.5.3.3'
+        default: '6.5.3.3'
       PHP_VERSION:
         description: 'PHP Version'
         required: true
