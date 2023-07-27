@@ -6,7 +6,7 @@ on:
       SW_VERSION:
         description: 'Shopware Version'
         required: true
-        default: '6.4.19.0'
+        default: 'v6.5.3.3'
       PHP_VERSION:
         description: 'PHP Version'
         required: true
@@ -60,7 +60,7 @@ jobs:
       shell: bash
       id: vars
       run: |
-        SW_VERSION="${{inputs.SW_VERSION}}"
+        SW_VERSION=$(echo "${{inputs.SW_VERSION}}" | sed -e "s/^v//")
         echo "DOCKER_TAG=${{inputs.SW_VERSION}}-${{inputs.PHP_VERSION}}-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
         echo "DOCKER_MAIN_TAG=${{inputs.SW_VERSION}}-${{inputs.PHP_VERSION}}"  >> $GITHUB_OUTPUT
         echo "DOCKER_IMAGE=forestsoft/shopware"  >> $GITHUB_OUTPUT
