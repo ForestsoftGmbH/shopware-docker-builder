@@ -39,7 +39,7 @@ on:
           - ""
           - "5.7"
           - "8.0"
-        default: ''
+        default: '5.7'
 
       REMOTE_REPO:
         description: 'Remote Repo'
