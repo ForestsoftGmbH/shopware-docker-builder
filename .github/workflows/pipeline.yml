@@ -62,7 +62,7 @@ jobs:
         if [ "${SW_VERSION:0:1}" == "6" ]; then
           echo "REMOTE_REPO=https://github.com/shopware/production.git"  >> $GITHUB_OUTPUT
         else
-          echo "REMOTE_REPO=https://github.com/shopware/shopware.git"  >> $GITHUB_OUTPUT
+          echo "REMOTE_REPO=https://github.com/shopware5/shopware.git"  >> $GITHUB_OUTPUT
         fi
         echo "SW_MAJOR=${SW_VERSION:0:1}"  >> $GITHUB_OUTPUT
 
