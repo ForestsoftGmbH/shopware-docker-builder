@@ -6,11 +6,12 @@ on:
       SW_VERSION:
         description: 'Shopware Version'
         required: true
-        default: '6.5.3.3'
+        default: '6.5.5.2'
         type: choice
         options:
           - "5.7.18"
           - "6.5.3.3"
+          - "6.5.5.2"
       PHP_VERSION:
         description: 'PHP Version'
         required: true
