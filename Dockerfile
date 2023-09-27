@@ -73,7 +73,6 @@ COPY --from=fetcher /app/shopware /var/www/html/
 RUN chmod 755 /usr/local/bin/composer \
 && composer update --no-scripts --no-interaction \
 && composer require postcon/bootstrap-extension --no-scripts --dev --no-interaction \
-&& composer require bamarni/composer-bin-plugin:^1.4 \
 && composer bin vimeo require --dev --no-scripts --no-interaction psr/log:1.1.4 vimeo/psalm:${PSALM_VERSION}
 
 
