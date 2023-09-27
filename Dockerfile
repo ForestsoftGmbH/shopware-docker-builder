@@ -1,20 +1,7 @@
 ARG PHP_VERSION="7.4"
 ARG COMPOSER_VERSION=2.1
 ARG composerImage=composer:$COMPOSER_VERSION
-
-# Lifehack
-FROM $composerImage as composer
-
-FROM alpine/git:v2.30.2 as fetcher
-ARG SW_VERSION=5.6.6
-ARG REMOTE_REPO="https://github.com/shopware/shopware.git"
-ARG COMPOSER_VERSION=2.1
-WORKDIR /app/
-RUN git clone $REMOTE_REPO shopware
-
-RUN cd shopware \
-&& git checkout v${SW_VERSION} \
-&& rm -Rf .git/
+FROM $composerImage as composerbuilder
 
 FROM php:${PHP_VERSION}-apache
 ARG SW_VERSION=5.6.6
@@ -66,16 +53,17 @@ RUN chmod -R 755 /usr/local/bin/docker-php-entrypoint /usr/local/bin/install.sh 
     && /usr/local/bin/install.sh \
     && sudo -E docker-php-ext-install -j$(nproc) gd intl pdo pdo_mysql zip mbstring simplexml mysqli opcache
 
-WORKDIR /var/www/html/
-
-COPY --from=composer /usr/bin/composer /usr/local/bin/composer
-COPY --from=fetcher /app/shopware /var/www/html/
+WORKDIR /tmp/
+COPY --from=composerbuilder /usr/bin/composer /usr/local/bin/composer
 RUN chmod 755 /usr/local/bin/composer \
-&& composer update --no-scripts --no-interaction \
-&& composer require postcon/bootstrap-extension --no-scripts --dev --no-interaction \
-&& composer bin vimeo require --dev --no-scripts --no-interaction psr/log:1.1.4 vimeo/psalm:${PSALM_VERSION}
+&& rm -Rf /var/www/html/*
 
+USER www-data
+RUN /usr/local/bin/installsw${SW_MAJOR}.sh
+WORKDIR /var/www/html/
+RUN composer require vimeo/psalm:${PSALM_VERSION}
 
+USER root
 COPY sw.phar /usr/local/bin/sw.phar
 COPY xdebug.sh /usr/local/bin/xdebug.sh
 
@@ -90,8 +78,6 @@ RUN chmod 755 /usr/local/bin/wait-for-it.sh  /usr/local/bin/boot-container.sh /u
     && chown -R www-data:www-data /var/www/html \
     && if [ -f "/var/www/html/engine/Shopware/Kernel.php" ]; then sed -i "s/___VERSION___/${SW_VERSION}/g" /var/www/html/engine/Shopware/Kernel.php; fi \
     && if  [ -f "/var/www/html/engine/Shopware/Application.php" ]; then sed -i "s/___VERSION___/${SW_VERSION}/g"  /var/www/html/engine/Shopware/Application.php; fi \
-    && ln -s /var/www/html/ /app \
-    && /usr/local/bin/installsw${SW_MAJOR}.sh \
     && apt clean \
     # This migration doesnt work:  Could not apply migration (Migrations_Migration1607). Error: SQLSTATE[HY000]: General error: 1093 You can't specify target table 's_core_config_values' for update in FROM clause
     && if [ -f "/var/www/html/_sql/migrations/1607-add-voucher-checkout-configs.php" ]; then rm /var/www/html/_sql/migrations/1607-add-voucher-checkout-configs.php; fi \

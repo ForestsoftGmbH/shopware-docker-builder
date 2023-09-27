@@ -25,11 +25,12 @@ on:
         description: 'Psalm Version'
         required: true
         type: choice
-        default: '5.7.5'
+        default: '5.15.0'
         options: 
           - "4.7.3"
           - "4.8.1"
           - "5.7.5"
+          - "5.15.0"
       COMPOSER_VERSION:
         description: 'Composer Version'
         required: true
