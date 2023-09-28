@@ -83,6 +83,7 @@ RUN chmod 755 /usr/local/bin/wait-for-it.sh  /usr/local/bin/boot-container.sh /u
     && if [ -f "/var/www/html/_sql/migrations/1607-add-voucher-checkout-configs.php" ]; then rm /var/www/html/_sql/migrations/1607-add-voucher-checkout-configs.php; fi \
     && rm -Rf /var/www/html/recovery \
     && rm -Rf /var/www/.composer \
+    && rm -Rf /var/www/html/.env \
     && mkdir /var/www/.composer \
     && chown www-data:www-data /var/www/.composer \
     && rm -Rf /var/lib/apt/lists/ \
