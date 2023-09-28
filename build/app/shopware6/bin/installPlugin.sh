@@ -37,3 +37,4 @@ if [ "$clearNeeded" == "1" ]; then
   echo "Clearing the cache"
   su -s/bin/bash -c"/var/www/html/bin/console cache:clear" www-data
 fi
+su -s/bin/bash -c"/var/www/html/bin/console plugin:update:all" www-data
