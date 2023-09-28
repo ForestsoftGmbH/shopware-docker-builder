@@ -1,6 +1,6 @@
 #!/bin/bash
 set +e
-. /usr/local/bin/init/setup-ssl.sh
+. /usr/local/bin/init/20-setup-ssl.sh
 apache2ctl start
 /usr/local/bin/wait-for-it.sh localhost:443 -t 90
 echo "curl --write-out '%{http_code}' --silent --output /dev/null -k -H "Host: $APP_HOST" https://localhost"
