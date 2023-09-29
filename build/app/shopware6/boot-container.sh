@@ -41,6 +41,9 @@ fi
 if [ "${SKIP_PLUGIN_INSTALL:-"0"}" != "1" ]; then
   /var/www/html/bin/installPlugin.sh
 fi
+if [ "${SKIP_PLUGIN_UPDATE:-"0"}" != "1" ]; then
+  su -s/bin/bash -c "/var/www/html/bin/console plugin:update:all" www-data
+fi
 if [ "${SKIP_THEME_COMPILE:-"0"}" != "1" ]; then
   su -s/bin/bash -c "/var/www/html/bin/console theme:compile" www-data
 fi
