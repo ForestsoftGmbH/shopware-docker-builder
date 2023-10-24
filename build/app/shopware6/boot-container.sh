@@ -1,7 +1,4 @@
 #!/bin/bash
-set -e
-
-
 function includeScriptDir() {
     if [[ -d "$1" ]]; then
         for FILE in "$1"/*.sh; do
