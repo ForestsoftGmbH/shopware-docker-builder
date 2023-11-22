@@ -17,8 +17,8 @@ includeScriptDir "/usr/local/bin/ssh-init"
 
 includeScriptDir "/usr/local/bin/init/"
 
-if [ -z $DB_WAIT_TIMEOUT ]; then
-  /usr/local/bin/wait-for-it.sh ${DB_HOST}:${DB_PORT} -t ${DB_WAIT_TIMEOUT:-120}
+if [ ! -z $DB_WAIT_TIMEOUT ]; then
+  /usr/local/bin/wait-for-it.sh ${DB_HOST}:${DB_PORT} -t ${DB_WAIT_TIMEOUT}
 fi
 
 if [ -f "/usr/local/etc/php/conf.d/xdebug.ini" ]; then
