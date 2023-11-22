@@ -22,7 +22,7 @@ COPY --from=builder /docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
 COPY --from=builder  /root/.my.cnf /root/.my.cnf
 HEALTHCHECK --timeout=5s --start-period=30s CMD /usr/bin/mysql $MYSQL_DATABASE -e "SELECT COUNT(*) as cnt FROM s_core_shops" || exit 1
 
-FROM mariadb:10.3.29 as shopware6
+FROM mysql:$VERSION as shopware6
 
 ARG SW_VERSION=6.4.2.0
 ARG SW_MAJOR=6
