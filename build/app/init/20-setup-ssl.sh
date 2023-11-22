@@ -1,5 +1,5 @@
 #!/bin/sh
-if [ ! -f "/etc/ssl/certs/ssl-cert-snakeoil.pem" ]; then
+if [ ! -f "/etc/ssl/certs/ssl-cert-snakeoil.pem" ] && [ "${DO_SSL_CREATE:-"0"}" != "0" ]; then
   if [ "${APP_HOST:-""}" = "" ]; then
     export APP_HOST="localhost"
   fi
